@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<style type="text/css">
+body:not(.en) :lang(en),
+body:not(.ro) :lang(ro) {
+  display: none;
+}
+</style>
 </head>
-<body>
+<body class="en">
+<select id="changeLang">
+  <option value="en">English</option>
+  <option value="ro">Română</option>
+</select> 
+<p>
+  <span lang="en">Notă pentru toți utilizatorii</span>
+  <span lang="ro">Note for all users</span>
+</p>
 <script type="text/javascript">
 window.onload = () => {
-var changeLangBtn = document.querySelector("#changeLang")
-document.querySelectorAll("[lang]").forEach(span =>
-  span.hide())
-
+  var changeLang = document.querySelector("#changeLang")
+  changeLangBtn.onchange = function() { body.className = this.value }
 }
 </script>
 </body>
