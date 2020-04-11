@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html>
+</html>
 <head>
 <style type="text/css">
 	body:not(.en) :lang(en),
 	body:not(.ro) :lang(ro) {
-	  display: none;
+		display: none;
 	}
 	body { margin: 0; padding: 0; }
 	header {
 		position: relative;
 		margin: 0;
-	  width: 100%;
-	  height: 50px;
-	  background: linear-gradient(to bottom right, blue, cyan);
+	  	width: 100%;
+	  	height: 50px;
+		background: linear-gradient(to bottom right, blue, cyan);
 	}
 	nav {
-		position: relative;
+		position: -webkit-sticky;
+		position: sticky;
 		margin: 0;
 		width: 100%;
 		height: 50px;
@@ -39,26 +40,22 @@
 </head>
 <body class="en">
 <header>
-  <big style="position: relative; margin-top: 0">
-    <span lang="en">Notice for all users. Please read this before using the website.</span>
-    <span lang="ro">Notă pentru toți utilizatorii. Vă rugăm să o citiți înainte de a folosi site-ul.</span>
-  </big>
+	<big style="position: relative; margin-top: 0">
+		<span lang="en">Notice for all users. Please read this before using the website.</span>
+		<span lang="ro">Notă pentru toți utilizatorii. Vă rugăm să o citiți înainte de a folosi site-ul.</span>
+	</big>
 </header>
 <nav>
-	<select id="changeLang" class="nav-btn">
-	  <option value="en">English</option>
-	  <option value="ro">Română</option>
-	</select> 
+	<div id="changeLangBtn" class="nav-btn">
+		<div id="lang-selected" />
+		<div id="languages" hidden>
+			<div onclick="changeLang('en')">English</div>
+			<div onclick="changeLang('ro')">Română</div>
+		</div>
+	</div> 
 </nav>
-<!--p>
-  <span lang="ro">Notă pentru toți utilizatorii</span>
-  <span lang="en">Note for all users</span>
-</p-->
 <script type="text/javascript">
-	window.onload = () => {
-	  var changeLang = document.querySelector("#changeLang")
-	  changeLang.onchange = function() { document.body.className = this.value }
-	}
+	function changeLang(lang) { document.body.className = lang }
 </script>
 </body>
 </html>
