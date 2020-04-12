@@ -1,0 +1,23 @@
+{
+  "name": "airplanes",
+  "version": "1.0.0",
+  "description": "An online board game similar to battleship",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlfiGit/airplanes-on-a-grid.git"
+  },
+  "author": "Sterea Stefan Octavian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlfiGit/airplanes-on-a-grid/issues"
+  },
+  "homepage": "https://github.com/AlfiGit/airplanes-on-a-grid#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
