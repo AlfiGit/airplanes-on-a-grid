@@ -1,29 +1,39 @@
 body:not(.en) :lang(en),
-	body:not(.ro) :lang(ro) {
-		display: none;
-	}
-	body { margin: 0; padding: 0; height: 200vh; }
-	header {
-		position: relative;
-		margin: 0;
-		width: 100%;
-		height: 50px;
-		background: linear-gradient(to bottom right, blue, cyan);
-		line-height: 50px;
-		text-align: center;
-	}
-	#note-form {
-		position: relative;
-		float: right;
-		width: 75px;
-		height: 30px;
-		margin-right: 10px;
-	}
-	#note-btn {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(to bottom right, #008aee, mediumturquoise);
-		border: #3460e2 solid 1.5px;
-		border-radius: 12px;
-	}
+body:not(.ro) :lang(ro) {
+	display: none;
+}
+body { margin: 0; padding: 0; height: 200vh; }
+header {
+	position: relative;
+	margin: 0;
+	width: 100%;
+	height: 50px;
+	background: linear-gradient(to bottom right, blue, cyan);
+	line-height: 50px;
+	text-align: center;
+}
+#note-form {
+	position: relative;
+	float: right;
+	width: 75px;
+	height: 30px;
+	margin-right: 10px;
+}
+#note-btn {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to bottom right, #008aee, mediumturquoise);
+	border: #3460e2 solid 1.5px;
+	border-radius: 12px;
+}
+
+button {
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}

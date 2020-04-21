@@ -1,9 +1,9 @@
 <nav>
-	<div id="changeLangBtn" class="nav-btn" tabindex="0" onblur="dropdownLang(false)">
-		<div id="selected-lang" onclick="dropdownLang()">English</div>
+	<div id="changeLangBtn" class="nav-container">
+		<button id="displayed-lang" class="nav-btn">English</button>
 		<div id="languages" hidden="true">
-			<div onclick="changeLang('en')" class="selected">English</div>
-			<div onclick="changeLang('ro')">Română</div>
+			<button data-lang="en" class="lang selected-lang">English</button>
+			<button data-lang="ro" class="lang">Română</button>
 		</div>
 	</div> 
 	<div class="nav-btn"></div>
