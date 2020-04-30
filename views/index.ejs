@@ -17,15 +17,15 @@
 		<span lang="ro">Vezi</span>
 	</button>
 </header>
-<%- include('navbar'); %>
+<%- include('navbar', {language: typeof language === "undefined" ? "en" : language}); %>
 <script type="text/javascript" src="js/language.js"></script>
 <script type="text/javascript">
-window.onload = function() {
+window.addEventListener('load', function() {
 	const note_btn = document.querySelector("#note-btn")
 	note_btn.addEventListener('click', function() {
 		window.location.href = '/notice?lang=' + document.body.className
 	})
-}
+})
 </script>
 </body>
 </html>

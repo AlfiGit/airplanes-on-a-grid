@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="<%= language; %>">
-<%- include('navbar'); %>
+<%- include('navbar', {language}); %>
 <div class="expandable-note" style="background-color: #5cc7eb; border-color: #1267b4; font-size: 30px;">
 	<span lang="en">
 		Dear users, <br>
@@ -22,7 +22,7 @@
 		Pretuim calitatea experientei ultilizatorilor si satisfactia jucatorilor este tot ce ne dorim, dar
 		suntem o echipa foarte mica compusa dintr-un singur dezvoltator principal (vedeti cat de mica e? Si totusi, imi place sa vorbesc despre mine ca despre o "echipa") si nu primim niciun venit din acest website. Pe langa asta, site-ul este gazduit de Heroku, ce ofera gazduire "freemium" (gratuita, dar limitata) pentru Node.js ce este folosit in constructia site-ului.
 		Desigur, nu imi permit sa platesc gazduirea, asa ca pot avea nu mai mult de 500 de ore de gazduire gratuita pe luna si o limita a vitezei de trafic de 60 de cereri/secunda. Asa ca, a trebuit sa inchid site-ul in fiecare zi de la 11PM la 7AM EET (GMT+2:00). Aceasta este versiunea europeana a website-ului si deci acest interval orar mi s-a parut rezonabil. Versiunea americana va fi disponibila curand.
-		<!--a href="https://us-airplanes-on-a-grid.herokuapp.com/">here</a-->
+		<!--a href="https://us-airplanes-on-a-grid.herokuapp.com/">aici</a-->
 	</span>
 </div>
 <div class="expandable-note" style="background-color: #ffb65c; border-color: #ff8c00; font-size: 30px;">
@@ -34,7 +34,8 @@
 	<span lang="ro">Din cauza restrictiilor platformei gazda a site-ului, a trebuit sa inchidem site-ul de la 11PM la 7AM EET (GMT+2:00)</span>
 </div>
 <div class="expandable-note" style="background-color: #94f660; border-color: #13ef0b; font-size: 30px;">
-	<span lang="en">Github</span>
+	<span lang="en">This in an open-source project. You can check it out on Github: <a href="https://github.com/AlfiGit/airplanes-on-a-grid">https://github.com/AlfiGit/airplanes-on-a-grid</a></span>
+	<span lang="ro">Acesta este un proiect open-source. Sursa poate fi gasita pe Github: <a href="https://github.com/AlfiGit/airplanes-on-a-grid">https://github.com/AlfiGit/airplanes-on-a-grid</a></span>
 </div>
 <script type="text/javascript" src="js/language.js"></script>
 </body>

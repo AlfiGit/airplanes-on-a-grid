@@ -2,7 +2,7 @@ const nameFor = { ro: "Română", en: "English" }
 
 var displayed, langDrop, selected
 
-window.onload = function() {
+window.addEventListener('load',function() {
   displayed = document.querySelector("#displayed-lang")
   langDrop = document.querySelector("#languages")
   selected = document.querySelector("button.selected-lang")
@@ -16,7 +16,7 @@ window.onload = function() {
   	})
   	btn.addEventListener('blur', langBlur)
   })
-}
+})
 
 function changeLang(lang, btn) { 
 	document.body.className = lang

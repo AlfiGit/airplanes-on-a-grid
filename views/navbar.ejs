@@ -1,6 +1,7 @@
+<% const nameFor = {en: "English", ro: "Română"}; %>
 <nav>
 	<div id="changeLangBtn" class="nav-container">
-		<button id="displayed-lang" class="nav-btn">English</button>
+		<button id="displayed-lang" class="nav-btn"><%= nameFor[language]; %></button>
 		<div id="languages" hidden="true">
 			<button data-lang="en" class="lang selected-lang">English</button>
 			<button data-lang="ro" class="lang">Română</button>
