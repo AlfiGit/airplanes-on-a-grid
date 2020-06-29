@@ -1,23 +1,35 @@
 {
-  "name": "airplanes",
+  "name": "airplanes3",
   "version": "1.0.0",
-  "description": "An online board game similar to battleship",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "dev": "node local-server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AlfiGit/airplanes-on-a-grid.git"
+  "author": "",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.12.21",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-hot-middleware": "^2.25.0"
   },
-  "author": "Sterea Stefan Octavian",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/AlfiGit/airplanes-on-a-grid/issues"
-  },
-  "homepage": "https://github.com/AlfiGit/airplanes-on-a-grid#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "firebase": "^7.15.1",
+    "react": "^16.13.1",
+    "webpack-dev-middleware": "^3.7.2"
   }
 }

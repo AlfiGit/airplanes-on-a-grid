@@ -2,10 +2,10 @@ body:not(.en) :lang(en),
 body:not(.ro) :lang(ro) {
 	display: none;
 }
-body { margin: 0; padding: 0; height: 200vh; }
+body { margin: 0; height: 200vh; background-color: rgb(241, 241, 241); max-width: 100%; }
 header {
 	position: relative;
-	margin: 0;
+	margin: 0px;
 	width: 100%;
 	height: 50px;
 	background: linear-gradient(to bottom right, blue, cyan);
@@ -32,6 +32,34 @@ header {
 	border-radius: 12px;
 	padding: 10px;
 	z-index: 1;
+}
+.underlined {
+	text-decoration: underline rgb(128, 223, 32) dashed;
+}
+a {
+	color: rgb(115, 221, 54);
+	text-decoration-color: rgb(115, 221, 54);
+}
+.middle-message {
+	font-size: 2em;
+	margin: 0 8px 0 8px;
+	text-align: center;
+	height: 93.33vh;
+	line-height: 93.33vh;
+}
+.middle-message > span {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+}
+.game-panel {
+	width: 40%;
+	background-color: silver;
+	margin-left: 2%;
+	margin-right: 5%;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+	display: inline-block;
 }
 
 button {

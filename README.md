@@ -1,1 +1,0 @@
-Yet another personal project. A basic Node.js 2-player grid game similar with Battleship.
