@@ -52,15 +52,6 @@ a {
 	vertical-align: middle;
 	line-height: normal;
 }
-.game-panel {
-	width: 40%;
-	background-color: silver;
-	margin-left: 2%;
-	margin-right: 5%;
-	margin-top: 2vh;
-	margin-bottom: 2vh;
-	display: inline-block;
-}
 
 button {
 	-webkit-touch-callout: none; /* iOS Safari */

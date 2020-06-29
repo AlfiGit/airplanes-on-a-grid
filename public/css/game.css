@@ -1,0 +1,25 @@
+.game-panel {
+    width: 50%;
+    height: auto;
+    display: inline-block;
+}
+
+.game-svg {
+    position: relative;
+	width: 80%;
+	background-color: silver;
+	margin-left: 2%;
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+	display: inline-block;
+}
+
+.game-tools {
+    position: relative;
+    width: 18%;
+    height: 100%;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    float: right;
+    background-color: peru;
+}

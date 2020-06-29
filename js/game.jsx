@@ -1,4 +1,5 @@
 import React from 'react';
+import '../public/css/game.css'
 
 export default function GamePage({lang='en', gameId, isPlayer1}) {
     app.user.isPlaying = true
@@ -15,14 +16,18 @@ export default function GamePage({lang='en', gameId, isPlayer1}) {
 
 function GamePanel() {
     let array = Array(10).fill(0)
-    return <svg className="game-panel" xmlns="http://www.w3.org/2000/svg" 
-    style={{height: `${(0.4 * document.documentElement.clientWidth) / innerWidth * 100}vw`}}>
-      {array.map((_, i) => {
-          return <React.Fragment key={i}>
+    let h = (0.4 * document.documentElement.clientWidth) / innerWidth * 100
+    return <div className="game-panel">
+        <svg className="game-svg" xmlns="http://www.w3.org/2000/svg" style={{height: `${h}vw`}}>
+            {array.map((_, i) => <React.Fragment key={i}>
               {array.map((_, j) => <Tile row={i} col={j} key={j} />)}
-          </React.Fragment>
-      })}
-    </svg>
+            </React.Fragment>)}
+        </svg>
+        <div className="game-tools">
+            <div className="g-tool-A">A</div>
+            <div className="g-tool-X">X</div>
+        </div>
+    </div>
 }
 
 function Tile({row, col}) {

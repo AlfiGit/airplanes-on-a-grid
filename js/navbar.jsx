@@ -1,5 +1,6 @@
 import React from 'react'
 import firebase from './fire.js'
+import '../public/css/nav.css'
 
 const nameFor = {en: "English", ro: "Română"}
 
