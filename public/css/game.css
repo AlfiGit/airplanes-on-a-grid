@@ -1,25 +1,59 @@
-.game-panel {
+.game-panel-container {
+    position: relative;
     width: 50%;
-    height: auto;
     display: inline-block;
+    padding-bottom: 50%;
+}
+
+.game-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .game-svg {
-    position: relative;
-	width: 80%;
+    position: absolute;
+    width: 80%;
+    height: 80%;
 	background-color: silver;
-	margin-left: 2%;
-	margin-top: 2vh;
-	margin-bottom: 2vh;
+	left: 2%;
+    top: 2vh;
+	bottom: 2vh;
 	display: inline-block;
 }
 
 .game-tools {
-    position: relative;
-    width: 18%;
-    height: 100%;
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-    float: right;
+    position: absolute;
+    width: 8%;
+    height: 80%;
+    top: 2vh;
+    left: 82%;
+    bottom: 2vh;
     background-color: peru;
+}
+
+.g-tool {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 10%;
+    text-align: center;
+    font-weight: bolder;
+    color: black;
+    border: black solid 1px;
+    font-size: 200%;
+}
+.g-tool.A {
+    background: linear-gradient(to bottom, #99ff99 2%, #12e912 50%, #10d110 50%, #11c911 88%, #11b411 100%);
+}
+.g-tool.X {
+    background: linear-gradient(to bottom, #ffad99 2%, #e83c11 50%, #d13610 50%, #ca3612 88%, #b63211 100%);
+}
+.g-tool.R {
+    background: linear-gradient(to bottom, #99c9ff 2%, #1176e8 50%, #106ad1 50%, #1268ca 88%, #115eb6 100%);
+}
+.g-tool.M {
+    background: linear-gradient(to bottom, #fdff99 2%, #e5e811 50%, #dbdf11 50%, #c7ca12 88%, #b3b611 100%);
 }
