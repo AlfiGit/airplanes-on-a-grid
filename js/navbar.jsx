@@ -1,5 +1,5 @@
 import React from 'react'
-import firebase from './fire.js'
+import {publicGame} from './user.js'
 import '../public/css/nav.css'
 
 const nameFor = {en: "English", ro: "Română"}
@@ -77,48 +77,11 @@ export default class Navbar extends React.Component {
 		if(e.relatedTarget?.classList.contains("lang") || e.relatedTarget == this.state.lang.displayed) return;
 		this.dropdownLang(false)
 	}
-
 	async publicGame() {
-		this.navigate('hold-on')
-		let db = firebase.database()
-		let newGamesRef = db.ref('/New Games')
-		let activeGamesRef = db.ref('/Active Games')
-		let countRef = newGamesRef.child('count')
-		let count = (await countRef.once('value')).val()
-		let gameId, isPlayer1;
-		if(count != 0) {
-			let random = Math.floor(Math.random() * count)
-			let query = await db.ref('/New Games').orderByChild('id').startAt(random).endAt(random).once('value')
-			let game = query.val()
-			gameId = Object.keys(game)[0]
-			game = game[gameId]
-			console.log(game)
-
-			game.state = 'full'
-			newGamesRef.child(gameId).remove()
-			isPlayer1 = false;
-			activeGamesRef.child(gameId).set({
-				player1Turn: true,
-				question: null,
-				answer: null
-			})
-			let activeCountRef = activeGamesRef.child('count')
-			let activeCount = (await activeCountRef.once('value')).val()
-			activeCountRef.set(activeCount + 1)
-			count = (await countRef.once('value')).val()
-			countRef.set(count - 1)
-		} else {
-			gameId = db.ref('/New Games').push({
-				public: true,
-				state: 'waiting',
-				id: count
-			}).key 
-			countRef.set(count + 1)
-			isPlayer1 = true;
-		}
-		this.navigate('game', {gameId, isPlayer1})
+		this.navigate('hold-on', {lang: this.state.lang.short})
+		let userData = await publicGame()
+		this.navigate('game', {lang: this.state.lang.short})
 	}
-
 	navigate(page, queries) {
 		app.setState({ page, queries })
 	}

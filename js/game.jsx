@@ -1,37 +1,49 @@
 import React from 'react';
 import '../public/css/game.css'
 
-export default function GamePage({lang='en', gameId, isPlayer1}) {
-    app.user.isPlaying = true
-    app.user.gameId = gameId
-    if(!isPlayer1) app.user.partnerHasJoined = true
-
-    return <React.Fragment>
-        <div style={{width: "100%", height: "auto"}}>
-            <GamePanel />
-            <GamePanel />
-        </div>
-    </React.Fragment>
+export default class GamePage extends React.Component {
+    constructor(props) {
+        super(props)
+        app.gameComponent = this
+        this.state = { player2Joined: !app.user.isPlayer1 }
+    }
+    render() {
+        //alert('game page rerendered; player2Joined=' + this.state.player2Joined)
+        return <React.Fragment>
+            <div style={{width: "100%", height: "auto"}}>
+                <GamePanel active={true} />
+                <GamePanel active={this.state.player2Joined} />
+            </div>
+        </React.Fragment>
+    }
 }
 
-function GamePanel() {
-    let array = Array(10).fill(0)
-    //let h = (0.4 * document.documentElement.clientWidth) / innerWidth * 100
-    return <div className="game-panel-container">
-        <div className="game-panel">
-            <svg className="game-svg" xmlns="http://www.w3.org/2000/svg">
-                {array.map((_, i) => <React.Fragment key={i}>
-                {array.map((_, j) => <Tile row={i} col={j} key={j} />)}
-                </React.Fragment>)}
-            </svg>
-            <div className="game-tools">
-                <div className="g-tool A">+</div>
-                <div className="g-tool X">⨯</div>
-                <div className="g-tool R">↻</div>
-                <div className="g-tool M">✥</div>
+class GamePanel extends React.Component {
+    constructor(props) {
+        super(props)
+        //alert('Panel reconstructed')
+        this.state = { active: this.props.active }
+    }
+    render() {
+        //alert('game panel rerendered; active=' + this.state.active)
+        let array = []
+        if(this.props.active) array = Array(10).fill(0)
+        return <div className="game-panel-container">
+            <div className="game-panel">
+                <svg className="game-svg" xmlns="http://www.w3.org/2000/svg">
+                    {array.map((_, i) => <React.Fragment key={i}>
+                    {array.map((_, j) => <Tile row={i} col={j} key={j} />)}
+                    </React.Fragment>)}
+                </svg>
+                <div className="game-tools">
+                    <div className="g-tool A">+</div>
+                    <div className="g-tool X">⨯</div>
+                    <div className="g-tool R">↻</div>
+                    <div className="g-tool M">✥</div>
+                </div>
             </div>
         </div>
-    </div>
+    }
 }
 
 function Tile({row, col}) {
