@@ -23,7 +23,7 @@ nav {
 .nav-btn, #languages > button.lang {
 	position: relative;
 	width: 100%;
-	line-height: 50px;
+	line-height: 6.77vh;
 	font-size: 2.1vw;
 	text-align: center;
 	border: none;

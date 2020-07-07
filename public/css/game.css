@@ -42,8 +42,15 @@
     text-align: center;
     font-weight: bolder;
     color: black;
-    border: black solid 1px;
+    border: black solid 0.02em;
     font-size: 200%;
+}
+.g-tool>svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
 }
 .g-tool.A {
     background: linear-gradient(to bottom, #99ff99 2%, #12e912 50%, #10d110 50%, #11c911 88%, #11b411 100%);
