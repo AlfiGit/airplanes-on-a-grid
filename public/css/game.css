@@ -55,12 +55,27 @@
 .g-tool.A {
     background: linear-gradient(to bottom, #99ff99 2%, #12e912 50%, #10d110 50%, #11c911 88%, #11b411 100%);
 }
+.g-tool.A:hover, .gtool.A.active {
+    background: linear-gradient(to bottom,  #11b411 2%, #11c911 50%, #10d110 50%, #12e912 88%, #99ff99 100%);
+}
+
 .g-tool.X {
     background: linear-gradient(to bottom, #ffad99 2%, #e83c11 50%, #d13610 50%, #ca3612 88%, #b63211 100%);
 }
+.g-tool.X:hover, .gtool.X.active {
+    background: linear-gradient(to bottom, #b63211 2%, #ca3612 50%, #d13610 50%, #e83c11 88%, #ffad99 100%);
+}
+
 .g-tool.R {
     background: linear-gradient(to bottom, #99c9ff 2%, #1176e8 50%, #106ad1 50%, #1268ca 88%, #115eb6 100%);
 }
+.g-tool.R:hover, .g-tool.R.active {
+    background: linear-gradient(to bottom, #115eb6 2%, #1268ca 50%, #106ad1 50%, #1176e8 88%, #99c9ff 100%);
+}
+
 .g-tool.M {
     background: linear-gradient(to bottom, #fdff99 2%, #e5e811 50%, #dbdf11 50%, #c7ca12 88%, #b3b611 100%);
+}
+.g-tool.M:hover, g.tool.M.active {
+    background: linear-gradient(to bottom, #b3b611 2%, #c7ca12 50%, #dbdf11 50%, #e5e811 88%, #fdff99 100%); 
 }
