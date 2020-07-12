@@ -16,7 +16,16 @@ export function Font({size, family="Arial", fstyle="normal", children, style, ..
 	}} {...props}>{children}</div>
 }
 
-export function randomId() {
+Array.prototype.remove = function(element) {
+	let copy = [...this]
+	let index = copy.indexOf(element)
+	if(index > -1) {
+		copy.splice(index, 1)
+	}
+	return copy
+}
+
+/*export function randomId() {
 	let randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26))
 	let uniqid = randLetter + Date.now()
 	for(let i = 0; i < 7; ++i) {
@@ -28,4 +37,4 @@ export function randomId() {
 
 String.prototype.replaceAt = function(index, replacement) {
     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
-}
+}*/
