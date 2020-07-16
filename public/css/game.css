@@ -31,7 +31,7 @@
     top: 2vh;
     left: 82%;
     bottom: 2vh;
-    background-color: peru;
+    /*background-color: peru;*/
 }
 
 .g-tool {
@@ -56,7 +56,7 @@
     background: linear-gradient(to bottom, #99ff99 2%, #12e912 50%, #10d110 50%, #11c911 88%, #11b411 100%);
 }
 .g-tool.A:hover, .g-tool.A.active {
-    background: linear-gradient(to bottom,  #11b411 2%, #11c911 50%, #10d110 50%, #12e912 88%, #99ff99 100%);
+    background: linear-gradient(to bottom, #11b411 2%, #11c911 50%, #10d110 50%, #12e912 88%, #99ff99 100%);
 }
 
 .g-tool.X {
@@ -79,3 +79,7 @@
 .g-tool.M:hover, .g-tool.M.active {
     background: linear-gradient(to bottom, #b3b611 2%, #c7ca12 50%, #dbdf11 50%, #e5e811 88%, #fdff99 100%); 
 }
+
+.blue-btn { fill: url('#blue'); } .blue-btn:hover { fill: url('#blue-hover'); }
+.green-btn { fill: url('#green'); } .green-btn:hover { fill: url('#green-hover'); }
+.gold-btn { fill: url('#gold'); } .gold-btn:hover { fill: url('#gold-hover'); }

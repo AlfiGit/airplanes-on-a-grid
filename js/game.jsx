@@ -1,6 +1,7 @@
 import React from 'react';
 import '../public/css/game.css'
 import './utils.jsx'
+import GameDefs from './defs.jsx';
 
 export default class GamePage extends React.Component {
     constructor(props) {
@@ -64,9 +65,9 @@ class GamePanel extends React.Component {
                 let airplanes = {...this.state.airplanes}, key = this.key_root++
                 let a = {row, col, r: 0}
                 airplanes[key] = a
-                this.setState({ airplanes, hover: null, outlineOn: {key, color: 'blue'} })
+                this.setState({ airplanes, hover: null, outlineOn: {key, color: 'blue'}, selected: key })
                 this.registerAirplane(a, key)
-                this.activeTool = 'R'; this.selected = key
+                this.activeTool = 'R';
                 this.toolbar.current.setState({ tool: 'R' })
             }
         }
@@ -112,6 +113,16 @@ class GamePanel extends React.Component {
         this.activeTool = 'A'
         this.setState({ outlineOn: null, selected: null })
     }
+    moveAirplane(key, r) {
+        let m = r == 0 ? [0, -1] : r == 90 ? [1, 0] : r == -90 ? [-1, 0] : [0, 1]
+        let airplane = {...this.state.airplanes[key]}
+        this.registerAirplane(airplane, key, false)
+        airplane.row += m[1]; airplane.col += m[0];
+        let airplanes = {...this.state.airplanes}
+        airplanes[key] = airplane
+        this.setState({ airplanes })
+        this.registerAirplane(airplane, key, true)
+    }
     render() {
         let array = []
         if(this.props.active) array = Array(10).fill(0)
@@ -124,41 +135,7 @@ class GamePanel extends React.Component {
                     click={this.clickTile.bind(this)} ref={this.tilemap[i][j]} />)}
                     </React.Fragment>)}
                     {/* defs */}
-                    <defs>
-                        <path id="plus" d="M20 50 H80 M50 20 V80 Z" strokeWidth="10%"></path>
-                        <use id="add" xlinkHref="#plus" stroke="black"></use>
-                        <use id="cross" xlinkHref="#add" transform="rotate(45 50 50)"></use>
-                        <polygon id="arrowhead" points="-12,0 12,0 0,-16" fill="black"></polygon>
-                        <g id="rotate">
-                            <path d="M75 50 A25 25 0 1 1 50 25" strokeWidth="10%" stroke="black" fill="none"></path>
-                            <use xlinkHref="#arrowhead" transform="translate(75 50)"></use>
-                        </g>
-                        <g id="move">
-                            <use xlinkHref="#add" transform="matrix(0.83, 0, 0, 0.83, 8.5, 8.5)"></use>
-                            <use xlinkHref="#arrowhead" transform="translate(50 25)"></use>
-                            <use xlinkHref="#arrowhead" transform="translate(50 75) rotate(180)"></use>
-                            <use xlinkHref="#arrowhead" transform="translate(25 50) rotate(-90)"></use>
-                            <use xlinkHref="#arrowhead" transform="translate(75 50) rotate(90)"></use>
-                        </g>
-                        <mask id="target-hole">
-                            <rect x="0" y="0" width="100" height="100" fill="white"></rect>
-                            <circle cx="50" cy="50" r="15" fill="silver" fill="black"></circle>
-                        </mask>
-                        <g id="target">
-                            <use xlinkHref="#plus" stroke="red" mask="url(#target-hole)"></use>
-                            <circle cx="50" cy="50" r="15" fill="transparent" strokeWidth="10" stroke="red"></circle>
-                        </g>
-                        <g id="no-target">
-                            <use xlinkHref="#plus" stroke="#333" mask="url(#target-hole)"></use>
-                            <circle cx="50" cy="50" r="15" fill="transparent" strokeWidth="10" stroke="#333"></circle>
-                        </g>
-                        <polygon id="airplane" points="0,-5 -5,5 -25,5 -25,15 -5,15 -5,25 -15,25 -15,35 15,35 15,25 5,25 5,15 25,15 25,5 5,5 0,-5"
-                        style={{pointerEvents: 'none'}}></polygon>
-                        <g id="circle-btn">
-                            <circle cx="0" cy="-10" r="3"></circle>
-                            <path d="M-1 -9.5 l1 -1 l1 1" stroke="white" fill="none" strokeWidth="0.5"></path>
-                        </g>
-                    </defs>
+                    <GameDefs />
                     {/* airplanes */}
                     {Object.entries(this.state.airplanes).map(([key, {row, col, r}]) => <use xlinkHref="#airplane" key={key}
                     fill="white" stroke="black" strokeWidth="0.5" transform={`translate(${col*10 + 5} ${row*10 + 5}) rotate(${r})`}></use>)}
@@ -170,13 +147,14 @@ class GamePanel extends React.Component {
                     {this.state.selected ? ((a,c) => {
                         let arr = [-90, 90, 0, 180]
                         return <>
-                          {arr.map(angle => <use xlinkHref="#circle-btn" key={angle} onClick={e=>this.rotateAirplane(this.state.selected, angle)}
-                          transform={`translate(${a.col * 10 + 5} ${a.row * 10 + 5}) rotate(${angle})`}
-                          fill={c == 'R' ? this.state.airplanes[this.state.selected].r != angle ? 'blue' : 'grey' : 'gold'} />)}
+                          {arr.map(angle => <use xlinkHref="#circle-btn" key={angle} 
+                          onClick={e=>(c == 'R' ? this.rotateAirplane : this.moveAirplane).call(this, this.state.selected, angle)}
+                          transform={`translate(${a.col * 10 + 5} ${a.row * 10 + 5}) rotate(${angle})`} 
+                          className={c == 'R' ? a.r != angle ? 'blue-btn' : 'grey-btn' : 'gold-btn'}></use>)}
                           <g onClick={this.rotateOk.bind(this)}>
-                            <circle cx={a.col * 10 + 5} cy={a.row * 10 + 5} r="3" fill="lawngreen" />
+                            <circle cx={a.col * 10 + 5} cy={a.row * 10 + 5} r="3" class="green-btn" />
                             <path d="M-2 0 L0 2 L3 -4" stroke="white" fill="none" strokeWidth="0.5" 
-                            transform={`translate(${a.col * 10 + 5} ${a.row * 10 + 5})`} />
+                            transform={`translate(${a.col * 10 + 5} ${a.row * 10 + 5})`} style={{pointerEvents: 'none'}}/>
                           </g>
                         </>
                     })(this.state.airplanes[this.state.selected], this.activeTool) : null}
