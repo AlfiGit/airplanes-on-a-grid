@@ -17,6 +17,7 @@ export default function GameDefs() {
             <use xlinkHref="#arrowhead" transform="translate(25 50) rotate(-90)"></use>
             <use xlinkHref="#arrowhead" transform="translate(75 50) rotate(90)"></use>
         </g>
+        <polygon id="play" points="25,20 25,80 75,50" fill="black"></polygon>
         <mask id="target-hole">
             <rect x="0" y="0" width="100" height="100" fill="white"></rect>
             <circle cx="50" cy="50" r="15" fill="silver" fill="black"></circle>
