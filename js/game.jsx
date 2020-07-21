@@ -25,7 +25,7 @@ class GamePanel extends React.Component {
         super(props)
         //alert('Panel reconstructed')
         this.state = { active: this.props.active, hover: null, contextTile: null, airplanes: {}, outlineOn: null,
-        selected: null }
+        selected: null, moving: null }
         this.tilemap = Array(10).fill(0).map(row => Array(10).fill(0).map(col => React.createRef()))
         this.toolbar = React.createRef()
         this.key_root = 1
@@ -33,13 +33,13 @@ class GamePanel extends React.Component {
     tool(L) {
         let toolbar = this.toolbar.current
         toolbar.setState({ tool: L })
-        this.setState({ selected: null, outlineOn: null })
+        this.setState({ selected: null, outlineOn: null, moving: null, hover: null })
         this.activeTool = L
     }
     hoverTile(hoverIn, position) {
-        if(this.activeTool == 'A' || (this.activeTool == 'M' && this.state.selected)) {
+        if(this.activeTool == 'A') {
             this.setState({ hover: (hoverIn ? 'target' : null), contextTile: position })
-        } 
+        }  
         if(this.activeTool == 'X') {
             let tile = this.tilemap[position.row][position.col].current
             if(tile.has == 'H' || tile.has == 'B') {
@@ -52,47 +52,69 @@ class GamePanel extends React.Component {
                 this.setState({ outlineOn: hoverIn ? {key: tile.akey, color: 'blue'} : null })
             }
         }
-        if(this.activeTool == 'M' && !this.state.selected) {
+        if(this.activeTool == 'M' && !this.state.moving) {
             let tile = this.tilemap[position.row][position.col].current
             if(tile.has == 'H' || tile.has == 'B') {
                 this.setState({ outlineOn: hoverIn ? {key: tile.akey, color: 'gold'} : null })
             }
+        }
+        if(this.activeTool == 'M' && this.state.moving) {
+            this.setState({ hover: (hoverIn ? 'airplane' : null), contextTile: position })
         }
     }
     clickTile(row, col) {
         if(this.activeTool == 'A') {
             let nrAirplanes = Object.values(this.state.airplanes).length
             if(nrAirplanes < 3) {
-                let airplanes = {...this.state.airplanes}, key = this.key_root++
-                let a = {row, col, r: 0}
-                airplanes[key] = a
-                this.activeTool = 'R';
-                this.setState({ airplanes, hover: null, outlineOn: {key, color: 'blue'}, selected: key })
-                this.registerAirplane(a, key)
-                this.toolbar.current.setState({ tool: 'R', finished: (nrAirplanes == 2)  })
+                let key = this.key_root++
+                let added = [0,90,-90,180].some(r => this.addAirplane({row, col, r}, key))
+                if(added) {
+                    this.activeTool = 'R';
+                    this.setState({ hover: null, outlineOn: {key, color: 'blue'}, selected: key })
+                    this.toolbar.current.setState({ tool: 'R' })
+                }
             }
         }
         if(this.activeTool == 'X') {
             let tile = this.tilemap[row][col].current
-            let airplanes = {...this.state.airplanes} 
-            let deletedAirplane = airplanes[tile.akey]
-            delete airplanes[tile.akey]
-            if(tile.has == 'H' || tile.has == 'B') {
-                this.setState({ outlineOn: null, airplanes })
-                this.registerAirplane(deletedAirplane, tile.akey, false)
-                this.toolbar.current.setState({ finished: false })
-            }
+            if(tile.has == 'H' || tile.has == 'B') this.removeAirplane(tile.akey)
         }
-        if(this.activeTool == 'R' || (this.activeTool == 'M' && !this.state.selected)) {
+        if(this.activeTool == 'R') {
             let tile = this.tilemap[row][col].current
-            this.setState({ selected: tile.akey })
+            if(tile.has == 'H' || tile.has == 'B') this.setState({ selected: tile.akey })
         }
         if(this.activeTool == 'M') {
-            if(!this.state.selected) {
-                let tile = this.tilemap[row][col].current
-                this.setState({ selected: tile.akey, contextTile: {row, col}, hover: 'target', outlineOn: {key: tile.akey, color: 'orange'} })
-            } else this.moveAirplane(this.state.selected, row, col)
+            let tile = this.tilemap[row][col].current
+            if(!this.state.moving && (tile.has == 'H' || tile.has == 'B')) {
+                let a = this.state.airplanes[tile.akey]
+                let translate = [row - a.row, col - a.col]
+                this.setState({ moving: {key: tile.akey, r: this.state.airplanes[tile.akey].r, translate }, 
+                hover: 'airplane', contextTile: {row, col} })
+                this.removeAirplane(tile.akey)
+            } else if(this.state.moving) {
+                let t = this.state.moving.translate
+                let added = this.addAirplane({ row: row - t[0], col: col - t[1], r: this.state.moving.r }, this.state.moving.key)
+                if(added) this.setState({ moving: null, hover: null, contextTile: null })
+            }
         }
+    }
+    addAirplane(a, key) {
+        let nrAirplanes = Object.values(this.state.airplanes).length
+        if(!this.check(a)) return false
+        let airplanes = {...this.state.airplanes}
+        airplanes[key] = a
+        this.setState({ airplanes }) 
+        this.registerAirplane(a, key)
+        this.toolbar.current.setState({ finished: (nrAirplanes == 2) })
+        return true
+    }
+    removeAirplane(key) {
+        let airplanes = {...this.state.airplanes}
+        let deletedAirplane = airplanes[key]
+        delete airplanes[key]
+        this.setState({ outlineOn: null, airplanes })
+        this.registerAirplane(deletedAirplane, key, false)
+        this.toolbar.current.setState({ finished: false })
     }
     registerAirplane(adesc, akey, add=true) {
         let shape = [[0,0], [0,1], [-1,1], [-2,1], [1,1], [2,1], [0,2], [0,3], [-1,3], [1,3]]
@@ -120,13 +142,22 @@ class GamePanel extends React.Component {
         this.activeTool = 'A'
         this.setState({ outlineOn: null, selected: null })
     }
-    moveAirplane(key, row, col) {
-        let airplanes = {...this.state.airplanes}
-        let a = {...airplanes[key], row, col}
-        this.registerAirplane(airplanes[key], key, false)
-        airplanes[key] = a
-        this.setState({ airplanes, outlineOn: null, selected: null, hover: null })
-        this.registerAirplane(a, key, true)
+    check(a, ignoreKey = 0) {
+        let shape = [[0,0], [0,1], [-1,1], [-2,1], [1,1], [2,1], [0,2], [0,3], [-1,3], [1,3]]
+        let cos = r => r == 0 ? 1 : r == 90 ? 0 : r == -90 ? 0 : r == 180 ? -1 : null
+        let sin = r => r == 0 ? 0 : r == 90 ? 1 : r == -90 ? -1 : r == 180 ? 0 : null
+        let rmatrix = (x, y, r) => [x * cos(r) - y * sin(r), y * cos(r) + x * sin(r)]
+        return shape.every(([dx, dy]) => {
+            [dx, dy] = rmatrix(dx, dy, a.r)
+            if(0 <= a.row + dy && a.row + dy < 10 && 0 <= a.col + dx && a.col + dx < 10) {
+                let tile = this.tilemap[a.row + dy][a.col + dx].current
+                if((tile.has == 'H' || tile.has == 'B') && tile.akey != ignoreKey) return false
+            } else return false
+            return true
+        })
+    }
+    checkRotation(key, angle) {
+        return this.check({...this.state.airplanes[key], r: angle}, key)
     }
     render() {
         let array = []
@@ -148,14 +179,14 @@ class GamePanel extends React.Component {
                     {this.state.outlineOn ? ((a,c)=><use xlinkHref="#airplane" stroke={c} strokeWidth="0.5" fill="white" 
                     transform={`translate(${a.col*10 + 5} ${a.row*10 + 5}) rotate(${a.r})`}></use>)
                     (this.state.airplanes[this.state.outlineOn.key], this.state.outlineOn.color) : null}
-                    {/* rotate & move gui */}
+                    {/* rotate gui */}
                     {(this.state.selected && this.activeTool == 'R') ? (a => {
                         let arr = [-90, 90, 0, 180]
                         return <>
                           {arr.map(angle => <use xlinkHref="#circle-btn" key={angle} 
                           onClick={e=>this.rotateAirplane(this.state.selected, angle)}
                           transform={`translate(${a.col * 10 + 5} ${a.row * 10 + 5}) rotate(${angle})`} 
-                          className={a.r != angle ? 'blue-btn' : 'grey-btn'}></use>)}
+                          className={a.r != angle && this.checkRotation(this.state.selected, angle) ? 'blue-btn' : 'grey-btn'}></use>)}
                           <g onClick={this.rotateOk.bind(this)}>
                             <circle cx={a.col * 10 + 5} cy={a.row * 10 + 5} r="3" className="green-btn" />
                             <path d="M-2 0 L0 2 L3 -4" stroke="white" fill="none" strokeWidth="0.5" 
@@ -165,12 +196,18 @@ class GamePanel extends React.Component {
                     })(this.state.airplanes[this.state.selected]) : null}
                     {/* context tile: target etc. */}
                     {this.state.contextTile ?
-                    <svg x={this.state.contextTile.col*10} y={this.state.contextTile.row*10} width="10" height="10" viewBox="0 0 100 100"
-                    style={{pointerEvents: 'none'}}>
-                        {this.state.hover == 'target' ?
-                        (this.activeTool == 'M' || (this.activeTool == 'A' && Object.values(this.state.airplanes).length < 3)) ?
-                           <use xlinkHref="#target"></use> : <use xlinkHref="#no-target"></use> : null}
-                    </svg> : null}
+                        this.state.hover == 'target' ?
+                            <svg x={this.state.contextTile.col*10} y={this.state.contextTile.row*10} width="10" height="10" 
+                            viewBox="0 0 100 100" style={{pointerEvents: 'none'}}>
+                                {(this.activeTool == 'A' && Object.values(this.state.airplanes).length < 3) ?
+                                <use xlinkHref="#target"></use> : <use xlinkHref="#no-target"></use>}
+                            </svg> : 
+                        this.state.hover =='airplane' ? 
+                            ((c,m) => (a => <use xlinkHref="#airplane" fill={this.check(a) ? '#fffa' : '#fbba'} stroke="#000a" 
+                            strokeWidth="0.5" transform={`translate(${a.col*10+5} ${a.row*10+5}) rotate(${a.r})`}></use>)
+                            ({row: c.row - m.translate[0], col: c.col - m.translate[1], r: m.r}))
+                            (this.state.contextTile, this.state.moving) : null 
+                    : null}
                 </svg>
                 <GameTools ref={this.toolbar} tool={this.tool.bind(this)}></GameTools>
             </div>
