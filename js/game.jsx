@@ -1,20 +1,23 @@
 import React from 'react';
 import '../public/css/game.css'
-import './utils.jsx'
+import { status } from './utils.jsx'
 import GameDefs from './defs.jsx';
 
 export default class GamePage extends React.Component {
     constructor(props) {
         super(props)
         app.gameComponent = this
-        this.state = { player2Joined: !app.user.isPlayer1 }
+        this.state = { ownStatus: status.PLACING, partnerStatus: app.user.partnerStatus }
+    }
+    startGame() {
+        app.user.dbGame.set({ [app.user.isPlayer1 ? 'player1Status' : 'player2Status']: status.READY })
+        this.setState({ ownStatus: status.READY })
     }
     render() {
-        //alert('game page rerendered; player2Joined=' + this.state.player2Joined)
         return <React.Fragment>
             <div style={{width: "100%", height: "auto"}}>
-                <GamePanel active={true} />
-                <GamePanel active={this.state.player2Joined} />
+                <GamePanel player={1} playerStatus={this.state.ownStatus} onGameStart={e=>this.startGame()} />
+                <GamePanel player={2} playerStatus={this.state.partnerStatus} />
             </div>
         </React.Fragment>
     }
@@ -23,9 +26,9 @@ export default class GamePage extends React.Component {
 class GamePanel extends React.Component {
     constructor(props) {
         super(props)
-        //alert('Panel reconstructed')
-        this.state = { active: this.props.active, hover: null, contextTile: null, airplanes: {}, outlineOn: null,
-        selected: null, moving: null }
+        let active = this.props.player == 1 || this.props.playerStatus > status.PLACING
+        this.state = { active, hover: null, contextTile: null, airplanes: {}, outlineOn: null,
+        selected: null, moving: null, gameStarted: false, hits: null }
         this.tilemap = Array(10).fill(0).map(row => Array(10).fill(0).map(col => React.createRef()))
         this.toolbar = React.createRef()
         this.key_root = 1
@@ -69,7 +72,7 @@ class GamePanel extends React.Component {
                 let key = this.key_root++
                 let added = [0,90,-90,180].some(r => this.addAirplane({row, col, r}, key))
                 if(added) {
-                    this.activeTool = 'R';
+                    this.activeTool = 'r'
                     this.setState({ hover: null, outlineOn: {key, color: 'blue'}, selected: key })
                     this.toolbar.current.setState({ tool: 'R' })
                 }
@@ -79,7 +82,7 @@ class GamePanel extends React.Component {
             let tile = this.tilemap[row][col].current
             if(tile.has == 'H' || tile.has == 'B') this.removeAirplane(tile.akey)
         }
-        if(this.activeTool == 'R') {
+        if(this.activeTool == 'R' && !this.state.selected) {
             let tile = this.tilemap[row][col].current
             if(tile.has == 'H' || tile.has == 'B') this.setState({ selected: tile.akey })
         }
@@ -138,8 +141,10 @@ class GamePanel extends React.Component {
         this.registerAirplane(airplanes[key], key, true)
     }
     rotateOk() {
-        this.toolbar.current.setState({ tool: 'A' })
-        this.activeTool = 'A'
+        if(this.activeTool == 'r') {
+            this.toolbar.current.setState({ tool: 'A' })
+            this.activeTool = 'A'
+        }
         this.setState({ outlineOn: null, selected: null })
     }
     check(a, ignoreKey = 0) {
@@ -159,9 +164,13 @@ class GamePanel extends React.Component {
     checkRotation(key, angle) {
         return this.check({...this.state.airplanes[key], r: angle}, key)
     }
+    startGame() {
+        this.setState({ gameStarted: true })
+        this.props.onGameStart()
+    }
     render() {
         let array = []
-        if(this.props.active) array = Array(10).fill(0)
+        if(this.state.active) array = Array(10).fill(0)
         return <div className="game-panel-container">
             <div className="game-panel">
                 <svg className="game-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -180,13 +189,15 @@ class GamePanel extends React.Component {
                     transform={`translate(${a.col*10 + 5} ${a.row*10 + 5}) rotate(${a.r})`}></use>)
                     (this.state.airplanes[this.state.outlineOn.key], this.state.outlineOn.color) : null}
                     {/* rotate gui */}
-                    {(this.state.selected && this.activeTool == 'R') ? (a => {
-                        let arr = [-90, 90, 0, 180]
+                    {this.state.selected ? (a => {
+                        let arr = [-90, 0, 90, 180]
+                        let reverse = [90, 180, -90, 0]
                         return <>
-                          {arr.map(angle => <use xlinkHref="#circle-btn" key={angle} 
-                          onClick={e=>this.rotateAirplane(this.state.selected, angle)}
+                          {arr.map((angle, i) => (canRotate => <use xlinkHref="#circle-btn" key={angle} 
+                          onClick={canRotate ? e=>this.rotateAirplane(this.state.selected, reverse[i]) : null}
                           transform={`translate(${a.col * 10 + 5} ${a.row * 10 + 5}) rotate(${angle})`} 
-                          className={a.r != angle && this.checkRotation(this.state.selected, angle) ? 'blue-btn' : 'grey-btn'}></use>)}
+                          className={a.r != reverse[i] && canRotate ? 'blue-btn' : 'grey-btn'}></use>)
+                          (this.checkRotation(this.state.selected, reverse[i])))}
                           <g onClick={this.rotateOk.bind(this)}>
                             <circle cx={a.col * 10 + 5} cy={a.row * 10 + 5} r="3" className="green-btn" />
                             <path d="M-2 0 L0 2 L3 -4" stroke="white" fill="none" strokeWidth="0.5" 
@@ -209,7 +220,24 @@ class GamePanel extends React.Component {
                             (this.state.contextTile, this.state.moving) : null 
                     : null}
                 </svg>
-                <GameTools ref={this.toolbar} tool={this.tool.bind(this)}></GameTools>
+                {/* messages */}
+                {this.props.player == 2 ?
+                    <div className="game-messages">
+                        {this.props.playerStatus == status.NOT_ENTERED ? <div className="message">
+                            <span lang="en">Waiting for partner to join...</span>
+                            <span lang="ro">Se asteapta alaturarea partenerului...</span>
+                        </div> : null}
+                        {this.props.playerStatus == status.PLACING ? <div className="message">
+                            <span lang="en">Your game partner is placing the airplanes...</span>
+                            <span lang="ro">Partenerul de joc isi asaza acum avioanele...</span>
+                        </div> : null}
+                    </div>
+                : null}
+                {(this.props.player == 1 && !this.state.gameStarted) ? 
+                  <GameTools ref={this.toolbar} tool={this.tool.bind(this)} startGame={e=>this.startGame()} player={1}></GameTools>
+                :(this.props.player == 2 && this.state.gameStarted)  ?
+                  <GameTools ref={this.toolbar} tool={this.tool.bind(this)} player={2}></GameTools>
+                : null}
             </div>
         </div>
     }
@@ -222,6 +250,11 @@ class GameTools extends React.Component {
     }
     render() {
         return <div className="game-tools">
+            {this.props.player == 2 ??
+            <div className={"g-tool H" + (this.state.tool == 'H' ? " active " : "")} onClick={e=>this.props.tool('H')}>
+                <svg viewBox="0 0 100 100"><use xlinkHref="#hit"></use></svg></div>
+            
+            }
             <div className={"g-tool A" + (this.state.tool == 'A' ? " active" : "")} onClick={e=>this.props.tool('A')}>
                 <svg viewBox="0 0 100 100"><use xlinkHref="#add"></use></svg></div>
             <div className={"g-tool X" + (this.state.tool == 'X' ? " active" : "")} onClick={e=>this.props.tool('X')}>

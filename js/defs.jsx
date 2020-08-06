@@ -17,19 +17,18 @@ export default function GameDefs() {
             <use xlinkHref="#arrowhead" transform="translate(25 50) rotate(-90)"></use>
             <use xlinkHref="#arrowhead" transform="translate(75 50) rotate(90)"></use>
         </g>
+        <use id="hit" xlinkHref="#target-no-stroke" stroke="white"></use> 
         <polygon id="play" points="25,20 25,80 75,50" fill="black"></polygon>
         <mask id="target-hole">
             <rect x="0" y="0" width="100" height="100" fill="white"></rect>
             <circle cx="50" cy="50" r="15" fill="silver" fill="black"></circle>
         </mask>
-        <g id="target">
-            <use xlinkHref="#plus" stroke="red" mask="url(#target-hole)"></use>
-            <circle cx="50" cy="50" r="15" fill="transparent" strokeWidth="10" stroke="red"></circle>
+        <g id="target-no-stroke">
+            <use xlinkHref="#plus" mask="url(#target-hole)"></use>
+            <circle cx="50" cy="50" r="15" fill="transparent" strokeWidth="10"></circle>
         </g>
-        <g id="no-target">
-            <use xlinkHref="#plus" stroke="#333" mask="url(#target-hole)"></use>
-            <circle cx="50" cy="50" r="15" fill="transparent" strokeWidth="10" stroke="#333"></circle>
-        </g>
+        <use id="target" xlinkHref="#target-no-stroke" stroke="red"></use>
+        <use id="no-target" xlinkHref="#target-no-stroke" stroke="#333"></use>
         <polygon id="airplane" points="0,-5 -5,5 -25,5 -25,15 -5,15 -5,25 -15,25 -15,35 15,35 15,25 5,25 5,15 25,15 25,5 5,5 0,-5"
         style={{pointerEvents: 'none'}}></polygon>
         <g id="circle-btn">

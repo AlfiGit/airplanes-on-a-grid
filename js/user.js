@@ -1,4 +1,5 @@
 import firebase from './fire.js';
+import { status } from './utils.jsx'
 
 export function initUser() {
     window.app.user = {
@@ -24,7 +25,7 @@ export async function publicGame() {
     let countNewRef = gamesRef.child('countNew')
     let countActiveRef = gamesRef.child('countActive')
     let countNew = (await countNewRef.once('value')).val()
-    let gameId, isPlayer1, partnerHasJoined;
+    let gameId, isPlayer1, partnerStatus;
     if(countNew != 0) { // there are new games waitng: join one as the 2nd player
         let random = Math.floor(Math.random() * countNew)
         let query = await gamesRef.orderByChild('id').startAt(random).endAt(random).once('value')
@@ -34,9 +35,10 @@ export async function publicGame() {
         game = game[gameId]
 
         isPlayer1 = false;
-        partnerHasJoined = true;
+        partnerStatus = game.player1Status
         gamesRef.child(gameId).set({
             state: 'full',
+            player2Status: status.PLACING,
             player1Turn: true,
             question: null,
             answer: null
@@ -51,14 +53,15 @@ export async function publicGame() {
         gameId = db.ref('/Games').push({
             public: true,
             state: 'waiting',
-            id: countNew
+            id: countNew,
+            player1Status: status.PLACING,
+            player2Status: status.NOT_ENTERED
         }).key 
         countNewRef.set(countNew + 1)
         isPlayer1 = true;
-        partnerHasJoined = false;
-        //db.ref('Games/' + gameId + '/state').on('value', snap => onGameStateChanged(snap.val()))
+        partnerStatus = status.NOT_ENTERED
     }
-    Object.assign(app.user, {playing: true, gameId, isPlayer1, partnerHasJoined})
+    Object.assign(app.user, {playing: true, gameId, isPlayer1, partnerStatus, dbGame: gamesRef.child(gameId) })
     setupChannels(gamesRef.child(gameId))
 }
 
@@ -69,11 +72,12 @@ function setupChannels(game) {
 function onGameStateChanged(state) {
     if(state == 'full' && app.user.isPlayer1) {
         //alert("Player2 Joined")
-        app.gameComponent.setState({ player2Joined: true })
+        app.gameComponent.setState({ partnerStatus: status.PLACING })
     } else if(state == 'aborted') {
 
     }
 }
+function sendToDatabase(changes) { app.user.dbGame.set(changes) }
 function onQuestion(q) {}
 function onAnswer(a) {}
 

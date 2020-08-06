@@ -16,6 +16,8 @@ export function Font({size, family="Arial", fstyle="normal", children, style, ..
 	}} {...props}>{children}</div>
 }
 
+export const status = { NOT_ENTERED: 0, PLACING: 1, READY: 2, GUEESING: 3, WAITING: 4 } 
+
 Array.prototype.remove = function(element) {
 	let copy = [...this]
 	let index = copy.indexOf(element)
