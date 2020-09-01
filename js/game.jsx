@@ -1,16 +1,17 @@
 import React from 'react';
 import '../public/css/game.css'
 import { status } from './utils.jsx'
+import { dbSet } from './user.js'
 import GameDefs from './defs.jsx';
 
 export default class GamePage extends React.Component {
     constructor(props) {
         super(props)
-        app.gameComponent = this
-        this.state = { ownStatus: status.PLACING, partnerStatus: app.user.partnerStatus }
+        this.state = { ownStatus: status.PLACING, partnerStatus: this.props.partnerStatus }
     }
+    componentDidMount() { app.gameComponent = this }
     startGame() {
-        app.user.dbGame.set({ [app.user.isPlayer1 ? 'player1Status' : 'player2Status']: status.READY })
+        dbSet({ [this.props.isPlayer1 ? 'player1Status' : 'player2Status']: status.READY })
         this.setState({ ownStatus: status.READY })
     }
     render() {
@@ -230,6 +231,15 @@ class GamePanel extends React.Component {
                         {this.props.playerStatus == status.PLACING ? <div className="message">
                             <span lang="en">Your game partner is placing the airplanes...</span>
                             <span lang="ro">Partenerul de joc isi asaza acum avioanele...</span>
+                        </div> : null}
+                        {this.props.playerStatus == status.READY ? <div className="message">
+                            <span lang="en">Your game partner is ready to play.</span>
+                            <span lang="ro">Partenerul de joc este gata sa inceapa.
+                            </span>
+                        </div> : null}
+                        {[0,1,2].indexOf(this.props.playerStatus) == -1 ? <div className="message">
+                            <span lang="en">Current status: {this.props.playerStatus}</span>
+                            <span lang="ro">Status curent: {this.props.playerStatus}</span>
                         </div> : null}
                     </div>
                 : null}

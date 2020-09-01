@@ -9,12 +9,12 @@ import {initUser} from './user.js';
 export default class App extends React.Component {
     constructor() {
         super()
-        this.state = { queries: {} }
+        this.state = { queries: {}, data: {} }
 
         const pathname = window.location.pathname
         let urlParams, lang
         if(!window.URLSearchParams) {
-            alert("This browser does not offer well support for this website. We recommend using Chrome or Edge")
+            alert("This browser does not offer well support for this website. We recommend using Chrome, Edge or Opera")
             // TO DO: Add alternative method of finding url params
         } else {
             urlParams = new URLSearchParams(window.location.search)
@@ -41,7 +41,7 @@ export default class App extends React.Component {
         else if(this.state.page == 'hold-on') Page = HoldOnPage
         return <React.Fragment>
             <Navbar lang={this.state.lang} />
-            <Page />
+            <Page {...this.state.data}/>
         </React.Fragment>
     }
 }

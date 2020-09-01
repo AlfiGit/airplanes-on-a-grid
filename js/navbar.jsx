@@ -80,9 +80,9 @@ export default class Navbar extends React.Component {
 	async publicGame() {
 		this.navigate('hold-on', {lang: this.state.lang.short})
 		let userData = await publicGame()
-		this.navigate('game', {lang: this.state.lang.short})
+		this.navigate('game', {lang: this.state.lang.short}, {...userData})
 	}
-	navigate(page, queries) {
-		app.setState({ page, queries })
+	navigate(page, queries, props) {
+		app.setState({ page, queries, data: props })
 	}
 }

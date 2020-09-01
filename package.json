@@ -1,14 +1,14 @@
 {
   "name": "airplanes3",
   "version": "1.0.0",
-  "description": "",
+  "description": "Firebase website",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
     "dev": "node local-server.js"
   },
-  "author": "",
+  "author": "Alfi Louis (Pseudoname)",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.0.0-beta.40",
@@ -31,6 +31,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "firebase": "^7.15.1",
+    "jquery": "^3.5.1",
     "react": "^16.13.1",
     "webpack-dev-middleware": "^3.7.2"
   }
