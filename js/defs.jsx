@@ -4,7 +4,8 @@ export default function GameDefs() {
     return <defs xmlns="http://www.w3.org/2000/svg">
         <path id="plus" d="M20 50 H80 M50 20 V80 Z" strokeWidth="10%"></path>
         <use id="add" xlinkHref="#plus" stroke="black"></use>
-        <use id="cross" xlinkHref="#add" transform="rotate(45 50 50)"></use>
+        <use id="cross-no-color" xlinkHref="#plus" transform="rotate(45 50 50)"></use>
+        <use id="cross" xlinkHref="#cross-no-color" stroke="black"></use>
         <polygon id="arrowhead" points="-12,0 12,0 0,-16" fill="black"></polygon>
         <g id="rotate">
             <path d="M75 50 A25 25 0 1 1 50 25" strokeWidth="10%" stroke="black" fill="none"></path>
@@ -17,7 +18,10 @@ export default function GameDefs() {
             <use xlinkHref="#arrowhead" transform="translate(25 50) rotate(-90)"></use>
             <use xlinkHref="#arrowhead" transform="translate(75 50) rotate(90)"></use>
         </g>
-        <use id="hit" xlinkHref="#target-no-stroke" stroke="white"></use> 
+        <use id="hit" xlinkHref="#target-no-stroke" stroke="white"></use>
+        <g id="send">
+            <path></path>
+        </g>
         <polygon id="play" points="25,20 25,80 75,50" fill="black"></polygon>
         <mask id="target-hole">
             <rect x="0" y="0" width="100" height="100" fill="white"></rect>
@@ -29,12 +33,17 @@ export default function GameDefs() {
         </g>
         <use id="target" xlinkHref="#target-no-stroke" stroke="red"></use>
         <use id="no-target" xlinkHref="#target-no-stroke" stroke="#333"></use>
+        <use id="guess" xlinkHref="#target-no-stroke" stroke="#c27"></use>
         <polygon id="airplane" points="0,-5 -5,5 -25,5 -25,15 -5,15 -5,25 -15,25 -15,35 15,35 15,25 5,25 5,15 25,15 25,5 5,5 0,-5"
         style={{pointerEvents: 'none'}}></polygon>
         <g id="circle-btn">
             <circle cx="0" cy="-10" r="3"></circle>
             <path d="M-1 -9.5 l1 -1 l1 1" stroke="white" fill="none" strokeWidth="0.5"></path>
         </g>
+        <rect id="square-mark" x="30" y="30" width="40" height="40"></rect>
+        <use id="mark-H" xlinkHref="#square-mark" transform="rotate(45 50 50)" fill="grey"></use>
+        <use id="mark-B" xlinkHref="#square-mark" fill="grey"></use>
+        <circle id="mark-A" cx="50" cy="50" r="20" stroke="grey" strokeWidth="10" fill="transparent"></circle>
         <g id="linearGradients">
         <linearGradient id="blue" gradientTransform="rotate(90)">
             {/* #99c9ff 2%, #1176e8 50%, #106ad1 50%, #1268ca 88%, #115eb6 100% */}

@@ -9,7 +9,7 @@ import {initUser} from './user.js';
 export default class App extends React.Component {
     constructor() {
         super()
-        this.state = { queries: {}, data: {} }
+        this.state = { queries: {} }
 
         const pathname = window.location.pathname
         let urlParams, lang
@@ -41,7 +41,7 @@ export default class App extends React.Component {
         else if(this.state.page == 'hold-on') Page = HoldOnPage
         return <React.Fragment>
             <Navbar lang={this.state.lang} />
-            <Page {...this.state.data}/>
+            <Page />
         </React.Fragment>
     }
 }
