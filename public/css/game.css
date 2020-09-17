@@ -116,3 +116,21 @@
 .blue-btn { fill: url('#blue'); } .blue-btn:hover { fill: url('#blue-hover'); }
 .green-btn { fill: url('#green'); } .green-btn:hover { fill: url('#green-hover'); }
 .gold-btn { fill: url('#gold'); } .gold-btn:hover { fill: url('#gold-hover'); }
+
+.indicator {
+    position: absolute;
+    top: calc(80% + 2vh);
+    height: 4vh;
+    right: 18%;
+    border-radius: 0 0 15px 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background: linear-gradient(to right, hsl(275, 75%, 44%), hsl(240, 100%, 50%));
+}
+.indicator.btn:-webkit-any(:focus, :hover) {
+    background: linear-gradient(to left, hsl(275, 75%, 34%), hsl(240, 100%, 40%));
+}
+.indicator > span {
+    line-height: 4vh;
+    color: white;
+}
