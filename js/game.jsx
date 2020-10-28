@@ -11,7 +11,7 @@ export default class GamePage extends React.Component {
         this.ownPanel = React.createRef()
         this.partnerPanel = React.createRef()
     }
-    componentDidMount() { user.set({gameComponent: this}) }
+    componentDidMount() { user.set({ gameComponent: this }) }
     startGame() {
         let qna = [status.WAITING, status.GUESSING]
         this.setState({ ownStatus: qna[+user.get().isPlayer1], partnerStatus: qna[1-user.get().isPlayer1] })
@@ -49,19 +49,6 @@ export default class GamePage extends React.Component {
                 <GamePanel player={1} playerStatus={this.state.ownStatus} onReady={e=>this.gameReady()} ref={this.ownPanel}/>
                 <GamePanel player={2} playerStatus={this.state.partnerStatus} ref={this.partnerPanel}/>
             </div>
-            {/*this.state.ownStatus > status.READY ?
-            {<p className={"game-bottom" + this.state.ownStatus == status.guessing ? " left" : " right"}>
-                {this.state.ownStatus < status.LOST ? <>
-                    <span lang="en">It's your {waiting ? "partner's" : ''} turn</span>
-                    <span lang="ro">Este randul {waiting ? "partenerului" : ''} tau.</span> </> 
-                :this.state.ownStatus == status.WON ? <>
-                    <span lang="en">Congratulations! You won! :D</span>
-                    <span lang="ro">Felicitari! Ai castigat! :D</span> </>
-                : <>
-                    <span lang="en">Too bad! You lost! :( Better luck next time!</span>
-                    <span lang="ro">Ce pacat! Ai pierdut! Mult noroc data viitoare!</span> </>
-                }
-            </p> : null*/}
         </React.Fragment>
     } 
 }
@@ -340,8 +327,12 @@ class GamePanel extends React.Component {
                     }
                 </svg>
                 {/* messages */}
-                {this.props.player == 2 &&
+                {(this.props.player == 2 && [-1,0,1,2].indexOf(this.props.playerStatus) != -1) &&
                     <div className="game-messages">
+                        {this.props.playerStatus == -1 && <div className="message">
+                            <span lang="en">Copy and send this code to a friend: <input readOnly value={user.get().gameId} /></span>
+                            <span lang="ro">Copiaza si trimite codul unui prieten: <input readOnly value={user.get().gameId} /></span>
+                        </div>}
                         {this.props.playerStatus == status.NOT_ENTERED && <div className="message">
                             <span lang="en">Waiting for partner to join...</span>
                             <span lang="ro">Se asteapta alaturarea partenerului...</span>

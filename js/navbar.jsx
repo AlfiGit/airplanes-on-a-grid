@@ -1,5 +1,5 @@
 import React from 'react'
-import {publicGame} from './user.js'
+import {publicGame, abortGame, user} from './user.js'
 import '../public/css/nav.css'
 
 const nameFor = {en: "English", ro: "Română"}
@@ -78,11 +78,17 @@ export default class Navbar extends React.Component {
 		this.dropdownLang(false)
 	}
 	async publicGame() {
-		this.navigate('hold-on', {lang: this.state.lang.short})
+		this.navigate('hold-on')
 		await publicGame()
-		this.navigate('game', {lang: this.state.lang.short})
+		this.navigate('game')
+		user.set({ isPlaying: true })
 	}
-	navigate(page, queries) {
-		app.setState({ page, queries })
+	navigate(page) {
+		let isPlaying = user.get().isPlaying
+		if(!isPlaying) app.setState({ page })
+		else if(confirm("Are you sure you want to leave? You will abort the game")) {
+			abortGame()
+			app.setState({ page })
+		}
 	}
 }

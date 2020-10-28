@@ -1,7 +1,7 @@
 import React from 'react'
 import { Font } from './utils.jsx';
 
-export default function AboutPage({lang='en'}) {
+export default function AboutPage() {
 	return <React.Fragment>
 		<Font size="2em" style={{margin: "0 8px 0 8px"}}>
 		<p>

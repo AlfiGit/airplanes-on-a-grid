@@ -4,6 +4,7 @@ import AboutPage from './about.jsx';
 import GamePage from './game.jsx'
 import HowToPlayPage from './howtoplay.jsx'
 import HoldOnPage from './holdon.jsx';
+import PrivateJoinPage from './privatejoin.jsx';
 import {initUser} from './user.js';
 
 export default class App extends React.Component {
@@ -39,6 +40,7 @@ export default class App extends React.Component {
         else if(this.state.page == 'game') Page = GamePage
         else if(this.state.page == 'how-to-play') Page = HowToPlayPage
         else if(this.state.page == 'hold-on') Page = HoldOnPage
+        else if(this.state.page == 'private-join') Page = PrivateJoinPage
         return <React.Fragment>
             <Navbar lang={this.state.lang} />
             <Page />

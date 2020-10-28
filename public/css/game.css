@@ -21,7 +21,6 @@
     top: 2vh;
     bottom: 2vh;
     display: inline-block;
-    pointer-events: none;
 }
 
 .game-messages > div.message {
