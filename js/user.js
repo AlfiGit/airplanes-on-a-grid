@@ -30,7 +30,7 @@ export function initUser() {
     // open dialog
 	window.onbeforeunload = () => { abortGame(); }
     window.onunload = abortGame
-    if(window.chrome) chrome.app.window.current().onClosed = abortGame 
+    if(window.chrome && chrome.app.window) chrome.app.window.current().onClosed = abortGame 
 }
 
 function createGame(publicc) {
