@@ -1,10 +1,10 @@
-import 'react-hot-loader/patch'
+//import 'react-hot-loader/patch'
 import React from 'react'
 import {render} from 'react-dom'
-import {AppContainer} from 'react-hot-loader';
+//import {AppContainer} from 'react-hot-loader';
 import App from './app.jsx';
 
-/*window.addEventListener('load', e => {
+/*/*window.addEventListener('load', e => {
 	const root = document.querySelector('#root')
 	const pathname = window.location.pathname
 	let urlParams, props, Page, lang
@@ -28,18 +28,18 @@ import App from './app.jsx';
 
 	render(<Page {...props}/>, root)
 	initUser()
-})*/
+}) *-/*/
 const hotRender = Component => render(
-	<AppContainer>
-		<Component />
-	</AppContainer>,
+	//<AppContainer>
+		<Component />,
+	//</AppContainer>,
 	document.querySelector('#root')
 )
 hotRender(App)
 
-if(module.hot) {
+/*if(module.hot) {
 	module.hot.accept('./app.jsx', () => {
 		let NewApp = require('./app.jsx').default
 		hotRender(NewApp)
 	})
-}
+}*/

@@ -10,6 +10,7 @@ export let user = {
 }
 
 function _init_user() {
+    let id = _user.authId
     _user = {
         isPlaying: false,
         isPlayer1: null,
@@ -17,17 +18,19 @@ function _init_user() {
         temporaryGameId: null,
         dbGame: null,
         get dbKey() { return this.isPlayer1 ? 'player1Status' : 'player2Status' },
-        db: firebase.database()
+        db: firebase.database(),
+        authId: id
     }
 }
 export function initUser() {
     _init_user()
+    firebase.auth().signInAnonymously().then(credentials => {
+        credentials.user.getIdToken().then(id => _user.authId = id)
+    })
     // open dialog
-	window.onbeforeunload = e => {
-        if(_user.isPlaying) return '';
-        return;
-    }
+	window.onbeforeunload = () => { abortGame(); }
     window.onunload = abortGame
+    if(window.chrome) chrome.app.window.current().onClosed = abortGame 
 }
 
 function createGame(publicc) {
@@ -110,7 +113,7 @@ export function detachListeners() {
 export async function abortGame() {
     let id = _user.gameId
     if(_user.isPlaying) {
-        fetch(`https://airplanes-on-a-grid.firebaseio.com/Games/${id}.json`, {
+        fetch(`https://airplanes-on-a-grid.firebaseio.com/Games/${id}.json?auth=${_user.authId}`, {
             method: 'DELETE',
             keepalive: true
         })

@@ -10,7 +10,7 @@ import {initUser} from './user.js';
 export default class App extends React.Component {
     constructor() {
         super()
-        this.state = { queries: {} }
+        this.state = { page: 'about', queries: {} }
 
         const pathname = window.location.pathname
         let urlParams, lang

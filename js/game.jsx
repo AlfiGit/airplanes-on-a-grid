@@ -68,7 +68,7 @@ class GamePanel extends React.Component {
     onQuestion([_, question]) {
         let a = this.tilemap[question[0]][question[1]].current.has
         let remaining = this.state.remaining - (a == 'H')
-        dbSet({ answer: [this.props.player + question.join(''), a] })
+        dbSet({ answer: [+user.get().isPlayer1 + question.join(''), a] })
         let hits = this.state.hits; hits.push(question)
         this.setState({ hits, remaining })
         return (remaining == 0)
@@ -87,7 +87,7 @@ class GamePanel extends React.Component {
             this.activeTool = L
         } else { 
             g = 2;
-            dbSet({ question: [this.props.player, this.state.guessOn] })
+            dbSet({ question: [+user.get().isPlayer1, this.state.guessOn] })
             toolbar.setState({ tool: null })
             this.activeTool = null 
         }
